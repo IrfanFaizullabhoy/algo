@@ -16,56 +16,11 @@ ADDITIONAL_PROMPT="[pasted values will not be displayed]"
 
 additional_roles () {
 
-read -p "
-Do you want macOS/iOS clients to enable \"VPN On Demand\" when connected to cellular networks?
-[y/N]: " -r OnDemandEnabled_Cellular
-OnDemandEnabled_Cellular=${OnDemandEnabled_Cellular:-n}
-if [[ "$OnDemandEnabled_Cellular" =~ ^(y|Y)$ ]]; then EXTRA_VARS+=" OnDemandEnabled_Cellular=Y"; fi
-
-read -p "
-Do you want macOS/iOS clients to enable \"VPN On Demand\" when connected to Wi-Fi?
-[y/N]: " -r OnDemandEnabled_WIFI
-OnDemandEnabled_WIFI=${OnDemandEnabled_WIFI:-n}
-if [[ "$OnDemandEnabled_WIFI" =~ ^(y|Y)$ ]]; then EXTRA_VARS+=" OnDemandEnabled_WIFI=Y"; fi
-
-if [[ "$OnDemandEnabled_WIFI" =~ ^(y|Y)$ ]]; then
-  read -p "
-List the names of trusted Wi-Fi networks (if any) that macOS/iOS clients exclude from using the VPN (e.g., your home network. Comma-separated value, e.g., HomeNet,OfficeWifi,AlgoWiFi)
-: " -r OnDemandEnabled_WIFI_EXCLUDE
-  OnDemandEnabled_WIFI_EXCLUDE=${OnDemandEnabled_WIFI_EXCLUDE:-_null}
-  EXTRA_VARS+=" OnDemandEnabled_WIFI_EXCLUDE=\"$OnDemandEnabled_WIFI_EXCLUDE\""
-fi
-
-read -p "
-Do you want to install a DNS resolver on this VPN server, to block ads while surfing?
-[y/N]: " -r dns_enabled
-dns_enabled=${dns_enabled:-n}
-if [[ "$dns_enabled" =~ ^(y|Y)$ ]]; then ROLES+=" dns"; EXTRA_VARS+=" local_dns=Y"; fi
-
-read -p "
-Do you want each user to have their own account for SSH tunneling?
-[y/N]: " -r ssh_tunneling_enabled
-ssh_tunneling_enabled=${ssh_tunneling_enabled:-n}
-if [[ "$ssh_tunneling_enabled" =~ ^(y|Y)$ ]]; then ROLES+=" ssh_tunneling"; fi
-
-read -p "
-Do you want to apply operating system security enhancements on the server? (warning: replaces your sshd_config)
-[y/N]: " -r security_enabled
-security_enabled=${security_enabled:-n}
-if [[ "$security_enabled" =~ ^(y|Y)$ ]]; then ROLES+=" security"; fi
-
-read -p "
-Do you want the VPN to support Windows 10 or Linux Desktop clients? (enables compatible ciphers and key exchange, less secure)
-[y/N]: " -r Win10_Enabled
-Win10_Enabled=${Win10_Enabled:-n}
-if [[ "$Win10_Enabled" =~ ^(y|Y)$ ]]; then EXTRA_VARS+=" Win10_Enabled=Y"; fi
-
-read -p "
-Do you want to retain the CA key? (required to add users in the future, but less secure)
-[y/N]: " -r Store_CAKEY
-Store_CAKEY=${Store_CAKEY:-N}
-if [[ "$Store_CAKEY" =~ ^(n|N)$ ]]; then EXTRA_VARS+=" Store_CAKEY=N"; fi
-
+ EXTRA_VARS+=" OnDemandEnabled_Cellular=Y";
+ EXTRA_VARS+=" OnDemandEnabled_WIFI=Y"; 
+ EXTRA_VARS+=" local_dns=Y";
+ ROLES+=" security";
+ 
 }
 
 deploy () {
